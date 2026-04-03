@@ -33,6 +33,11 @@ const RouteUtils = {
    * @returns {Object|null}
    */
   extractParams(pattern, path) {
+    // Handle wildcard - matches any path
+    if (pattern === '*') {
+      return {};
+    }
+
     const paramNames = [];
     const regexPattern = pattern.replace(/:([^/]+)/g, (match, name) => {
       paramNames.push(name);

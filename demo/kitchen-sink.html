@@ -179,8 +179,8 @@
                 <div class="demo-card">
                     <h3>Two-Way Binding</h3>
                     <div class="form-group">
-                        <label class="savage-label">Your Name</label>
-                        <input type="text" class="savage-input" data-model="name" placeholder="Type something...">
+                        <label for="userName" class="savage-label">Your Name</label>
+                        <input type="text" id="userName" name="userName" class="savage-input" data-model="name" placeholder="Type something...">
                     </div>
                     <p>Hello, <span data-bind="name" style="font-weight: bold;">Stranger</span>!</p>
                 </div>
@@ -188,8 +188,8 @@
                 <div class="demo-card">
                     <h3>Conditional Display</h3>
                     <div class="form-group">
-                        <label class="savage-label">
-                            <input type="checkbox" data-model="showSecret"> Show Secret Message
+                        <label for="showSecret" class="savage-label">
+                            <input type="checkbox" id="showSecret" name="showSecret" data-model="showSecret"> Show Secret Message
                         </label>
                     </div>
                     <div data-bind="showSecret" style="padding: 1rem; background: var(--savage-success); color: white; border-radius: var(--savage-radius-md);" class="hidden">
@@ -206,26 +206,26 @@
                 <h3>Registration Form</h3>
                 <form id="demo-form" style="max-width: 400px;">
                     <div class="form-group">
-                        <label class="savage-label">Username *</label>
-                        <input type="text" class="savage-input" data-model="username" placeholder="min 3 characters">
+                        <label for="username" class="savage-label">Username *</label>
+                        <input type="text" id="username" name="username" class="savage-input" data-model="username" placeholder="min 3 characters">
                         <div class="form-error" data-bind="errors.username"></div>
                     </div>
                     
                     <div class="form-group">
-                        <label class="savage-label">Email *</label>
-                        <input type="email" class="savage-input" data-model="email" placeholder="your@email.com">
+                        <label for="email" class="savage-label">Email *</label>
+                        <input type="email" id="email" name="email" class="savage-input" data-model="email" placeholder="your@email.com">
                         <div class="form-error" data-bind="errors.email"></div>
                     </div>
                     
                     <div class="form-group">
-                        <label class="savage-label">Password *</label>
-                        <input type="password" class="savage-input" data-model="password" placeholder="min 6 characters">
+                        <label for="password" class="savage-label">Password *</label>
+                        <input type="password" id="password" name="password" class="savage-input" data-model="password" placeholder="min 6 characters">
                         <div class="form-error" data-bind="errors.password"></div>
                     </div>
                     
                     <div class="form-group">
-                        <label class="savage-label">Confirm Password *</label>
-                        <input type="password" class="savage-input" data-model="confirmPassword" placeholder="same as password">
+                        <label for="confirmPassword" class="savage-label">Confirm Password *</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="savage-input" data-model="confirmPassword" placeholder="same as password">
                         <div class="form-error" data-bind="errors.confirmPassword"></div>
                     </div>
                     
