@@ -162,7 +162,18 @@ export class SavageValidator {
         // Rule with options: { rule: 'minLength', params: [5], message: 'Custom' }
         const ruleName = rule.rule;
         const params = rule.params || [];
-        validator = ValidationRules[ruleName](...params);
+        const ruleFn = ValidationRules[ruleName];
+        
+        // Check if rule is a factory (needs params to create validator) or direct validator
+        const factoryRules = ['minLength', 'maxLength', 'range', 'pattern', 'match'];
+        if (factoryRules.includes(ruleName)) {
+          // Factory: call with params to get validator function
+          validator = ruleFn(...params);
+        } else {
+          // Direct validator: use as-is (required, email, url)
+          validator = ruleFn;
+        }
+        
         message = rule.message || this._getDefaultMessage(ruleName, params);
       }
 
