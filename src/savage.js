@@ -23,6 +23,34 @@ export { SavageReactor, isReactive } from './core/reactor.js';
 export { SavageBinder } from './core/binder.js';
 export { VERSION, getVersion, BUILD_INFO } from './core/version.js';
 
+// Utilities
+export { SavageHttp, createHttpClient, http, ResponseUtils } from './utils/http.js';
+export { SavageValidator, ValidationRules, ErrorMessages, createValidator, validateElement } from './utils/validation.js';
+
+// Directives
+export { directives, registerDirective, getDirective, applyDirective, getBuiltInDirectives } from './directives/index.js';
+
+// Router
+export { SavageRouter, createRouter } from './router/index.js';
+
+// Store
+export { SavageStore, createStore, createLoggerPlugin, createPersistencePlugin } from './store/index.js';
+
+// Animations
+export {
+  animate,
+  enter,
+  leave,
+  transition,
+  stagger,
+  shake,
+  pulse,
+  highlight,
+  Transitions,
+  Easings,
+  SavageTransition
+} from './animations/index.js';
+
 // Main SavageApp class as default export
 import { SavageApp, createApp } from './core/app.js';
 export default SavageApp;
