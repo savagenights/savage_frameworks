@@ -39,9 +39,6 @@ export class SavageComponent {
    * @param {Object} options.hooks - Lifecycle hooks
    */
   constructor(options = {}) {
-    console.log('Component: Creating with options:', Object.keys(options));
-    console.log('Component: Actions in options:', Object.keys(options.actions || {}));
-    
     // Core properties
     this.name = options.name || 'anonymous';
     this.version = VERSION;
@@ -244,7 +241,6 @@ export class SavageComponent {
 
     if (declarative) {
       // In declarative mode, use the existing HTML as-is
-      console.log('Component: Declarative mount, using existing element');
       this.element = targetElement;
     } else {
       // Render component
@@ -256,9 +252,7 @@ export class SavageComponent {
     }
 
     // Set up bindings
-    console.log('Component: Setting up bindings...');
     this.binder.bind(this.element);
-    console.log('Component: Bindings set up');
 
     // Mark as mounted
     this.isMounted = true;

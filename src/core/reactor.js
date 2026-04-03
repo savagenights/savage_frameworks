@@ -169,13 +169,10 @@ export class SavageReactor {
     if (this.effectStack.length > 0) {
       const currentEffect = this.effectStack[this.effectStack.length - 1];
       
-      console.log(`Reactor: Tracking dependency "${path}" for effect`);
-      
       if (!this.subscribers.has(path)) {
         this.subscribers.set(path, new Set());
       }
       this.subscribers.get(path).add(currentEffect);
-      console.log(`Reactor: Added subscriber for "${path}", total subscribers:`, this.subscribers.get(path).size);
     }
   }
 
@@ -185,11 +182,8 @@ export class SavageReactor {
    * @private
    */
   _notifyChange(path) {
-    console.log(`Reactor: Notifying change for "${path}", batching: ${this.isBatching}`);
-    
     if (this.isBatching) {
       this.batchQueue.add(path);
-      console.log(`Reactor: Added "${path}" to batch queue`);
       return;
     }
 
@@ -203,12 +197,10 @@ export class SavageReactor {
    */
   _flushNotification(path) {
     const effects = this.subscribers.get(path);
-    console.log(`Reactor: Flushing "${path}", found ${effects ? effects.size : 0} subscribers`);
     
     if (effects) {
       effects.forEach(effect => {
         try {
-          console.log(`Reactor: Running effect for "${path}"`);
           effect();
         } catch (err) {
           console.error(`SavageReactor: Effect error for path "${path}":`, err);
@@ -275,7 +267,6 @@ export class SavageReactor {
       
       // Flush all batched notifications
       const uniquePaths = Array.from(this.batchQueue);
-      console.log(`Reactor: Flushing batch with ${uniquePaths.length} paths:`, uniquePaths);
       this.batchQueue.clear();
       
       // Use Set to deduplicate effects

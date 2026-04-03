@@ -100,23 +100,14 @@ export class SavageBinder {
    * @param {HTMLElement} rootElement 
    */
   bind(rootElement) {
-    if (!rootElement) {
-      console.log('Binder: No root element provided');
-      return;
-    }
-
-    console.log('Binder: Starting bind on element', rootElement);
+    if (!rootElement) return;
 
     // Find all elements with directives
     const elements = this._findDirectiveElements(rootElement);
-    console.log(`Binder: Found ${elements.length} elements with directives`);
     
-    elements.forEach((el, i) => {
-      console.log(`Binder: Processing element ${i}:`, el.tagName, el.outerHTML.substring(0, 100));
+    elements.forEach(el => {
       this._processElement(el);
     });
-    
-    console.log('Binder: Bind complete');
   }
 
   /**
@@ -175,23 +166,15 @@ export class SavageBinder {
    * @private
    */
   _bindData(el, path) {
-    console.log(`Binder._bindData: Binding ${path} to element`, el);
-    
     // Initial update
     const value = getByPath(this.reactor.state, path);
-    console.log(`Binder._bindData: Initial value for ${path}:`, value);
     this._updateElementContent(el, value);
 
     // Watch for changes
     const unsubscribe = this.reactor.watch(
-      () => {
-        const val = getByPath(this.reactor.state, path);
-        console.log(`Binder._bindData: Watcher checked ${path}, value:`, val);
-        return val;
-      },
+      () => getByPath(this.reactor.state, path),
       () => {
         const newValue = getByPath(this.reactor.state, path);
-        console.log(`Binder._bindData: Updating ${path} to:`, newValue);
         this._updateElementContent(el, newValue);
       }
     );
@@ -300,30 +283,23 @@ export class SavageBinder {
    * @private
    */
   _bindAction(el, actionName) {
-    console.log(`Binder: Binding action "${actionName}" to element`, el);
-    
     const handler = (e) => {
-      console.log(`Binder: Action "${actionName}" triggered`);
       const fn = this.component.actions?.[actionName];
       
       if (typeof fn === 'function') {
-        console.log(`Binder: Calling action "${actionName}"`);
         // Pass state, event, and component reference
         const result = fn(this.reactor.getState(), e, this.component);
         
         if (result && typeof result === 'object') {
-          console.log(`Binder: Setting state with result`, result);
           this.reactor.setState(result);
         }
       } else {
         console.warn(`SavageBinder: Action "${actionName}" not found in component`);
-        console.log('Available actions:', Object.keys(this.component.actions || {}));
       }
     };
 
     el.addEventListener('click', handler);
     this.eventListeners.push({ el, type: 'click', handler });
-    console.log(`Binder: Click listener attached for "${actionName}"`);
   }
 
   /**
@@ -450,16 +426,12 @@ export class SavageBinder {
    * @private
    */
   _updateElementContent(el, value) {
-    console.log(`Binder._updateElementContent: Updating ${el.tagName} with value:`, value);
-    
     // Handle different input types
     if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
       this._setInputValue(el, value, el.tagName.toLowerCase(), el.type);
     } else {
       // Text content for regular elements
-      const newText = value != null ? value : '';
-      console.log(`Binder._updateElementContent: Setting textContent to "${newText}"`);
-      el.textContent = newText;
+      el.textContent = value != null ? value : '';
     }
   }
 

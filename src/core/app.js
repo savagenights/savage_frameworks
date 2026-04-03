@@ -174,10 +174,7 @@ export class SavageApp {
       // For declarative mounting, use the existing HTML as template
       if (declarative) {
         const existingHTML = targetElement.innerHTML;
-        console.log(`App: Declarative mount for "${component}"`);
-        console.log(`App: Definition actions:`, Object.keys(definition.actions || {}));
         instance = new SavageComponent({ ...definition, props, template: existingHTML });
-        console.log(`App: Instance actions:`, Object.keys(instance.actions || {}));
       } else {
         instance = new SavageComponent({ ...definition, props });
       }
