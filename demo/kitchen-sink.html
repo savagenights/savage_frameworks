@@ -605,21 +605,21 @@
                 });
             },
             actions: {
-                storeIncrement: () => {
+                storeIncrement: (state) => {
                     store.commit('increment');
-                    return {};
+                    return state;
                 },
-                storeDecrement: () => {
+                storeDecrement: (state) => {
                     store.commit('decrement');
-                    return {};
+                    return state;
                 },
-                storeReset: () => {
+                storeReset: (state) => {
                     store.commit('reset');
-                    return {};
+                    return state;
                 },
-                storeDouble: () => {
+                storeDouble: (state) => {
                     store.commit('double');
-                    return {};
+                    return state;
                 }
             }
         });
@@ -628,7 +628,17 @@
         // 6. Router Setup
         // ============================================
         const router = createRouter({
-            base: '/kitchen-sink.html'
+            base: '/demo/kitchen-sink.html'
+        });
+
+        // Route for the demo page itself (to prevent "no route found" error)
+        router.route('/', {
+            title: 'Kitchen Sink Demo - Savage Frameworks',
+            component: () => {
+                // Return the existing demo content
+                const content = document.querySelector('.demo-container');
+                return content || document.createElement('div');
+            }
         });
 
         router.route('/home', {

@@ -350,20 +350,40 @@ export class SavageRouter {
                    document.body;
 
     if (typeof component === 'function') {
-      // Component class/function
-      const instance = new component({
-        router: this,
-        route,
-        params: route.params,
-        query: route.query
-      });
+      // Check if component is a constructor (class) or a factory function
+      const isConstructor = component.prototype && component.prototype.constructor === component;
       
-      if (instance.mount) {
-        outlet.innerHTML = '';
-        instance.mount(outlet);
+      if (isConstructor) {
+        // Component class
+        const instance = new component({
+          router: this,
+          route,
+          params: route.params,
+          query: route.query
+        });
+        
+        if (instance.mount) {
+          outlet.innerHTML = '';
+          instance.mount(outlet);
+        } else {
+          outlet.innerHTML = '';
+          outlet.appendChild(instance);
+        }
       } else {
+        // Factory function - call it to get the element
+        const element = component({
+          router: this,
+          route,
+          params: route.params,
+          query: route.query
+        });
+        
         outlet.innerHTML = '';
-        outlet.appendChild(instance);
+        if (element instanceof HTMLElement) {
+          outlet.appendChild(element);
+        } else if (typeof element === 'string') {
+          outlet.innerHTML = element;
+        }
       }
     } else if (typeof component === 'string') {
       // HTML template
