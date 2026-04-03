@@ -1,0 +1,415 @@
+/**
+ * 🦁 Savage CSS - Core Styles
+ * 
+ * A lightweight, modern CSS foundation for Savage Frameworks.
+ * Built on CSS Snapshot 2023 standards.
+ * 
+ * @version 0.1.0-alpha
+ * @link https://www.w3.org/TR/css-2023/
+ */
+
+/* ==========================================================================
+   CSS Custom Properties (Variables)
+   ========================================================================== */
+:root {
+  /* Colors */
+  --savage-primary: #2563eb;
+  --savage-primary-dark: #1d4ed8;
+  --savage-primary-light: #60a5fa;
+  --savage-secondary: #64748b;
+  --savage-success: #22c55e;
+  --savage-warning: #f59e0b;
+  --savage-error: #ef4444;
+  --savage-info: #3b82f6;
+  
+  /* Neutrals */
+  --savage-white: #ffffff;
+  --savage-gray-100: #f8fafc;
+  --savage-gray-200: #f1f5f9;
+  --savage-gray-300: #e2e8f0;
+  --savage-gray-400: #cbd5e1;
+  --savage-gray-500: #94a3b8;
+  --savage-gray-600: #64748b;
+  --savage-gray-700: #475569;
+  --savage-gray-800: #334155;
+  --savage-gray-900: #1e293b;
+  --savage-black: #0f172a;
+  
+  /* Typography */
+  --savage-font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --savage-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  
+  /* Font Sizes */
+  --savage-text-xs: 0.75rem;
+  --savage-text-sm: 0.875rem;
+  --savage-text-base: 1rem;
+  --savage-text-lg: 1.125rem;
+  --savage-text-xl: 1.25rem;
+  --savage-text-2xl: 1.5rem;
+  --savage-text-3xl: 1.875rem;
+  
+  /* Spacing */
+  --savage-space-1: 0.25rem;
+  --savage-space-2: 0.5rem;
+  --savage-space-3: 0.75rem;
+  --savage-space-4: 1rem;
+  --savage-space-5: 1.25rem;
+  --savage-space-6: 1.5rem;
+  --savage-space-8: 2rem;
+  --savage-space-10: 2.5rem;
+  --savage-space-12: 3rem;
+  
+  /* Borders */
+  --savage-radius-sm: 0.25rem;
+  --savage-radius-md: 0.375rem;
+  --savage-radius-lg: 0.5rem;
+  --savage-radius-xl: 0.75rem;
+  --savage-radius-full: 9999px;
+  
+  /* Shadows */
+  --savage-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --savage-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --savage-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  
+  /* Transitions */
+  --savage-transition-fast: 150ms ease-in-out;
+  --savage-transition-base: 250ms ease-in-out;
+  --savage-transition-slow: 350ms ease-in-out;
+}
+
+/* ==========================================================================
+   Reset & Base
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--savage-font-sans);
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--savage-white);
+  color: var(--savage-gray-900);
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* ==========================================================================
+   Layout Utilities
+   ========================================================================== */
+.savage-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--savage-space-4);
+  padding-right: var(--savage-space-4);
+}
+
+.savage-flex {
+  display: flex;
+}
+
+.savage-flex-col {
+  flex-direction: column;
+}
+
+.savage-items-center {
+  align-items: center;
+}
+
+.savage-justify-center {
+  justify-content: center;
+}
+
+.savage-justify-between {
+  justify-content: space-between;
+}
+
+.savage-grid {
+  display: grid;
+}
+
+.savage-hidden {
+  display: none !important;
+}
+
+/* ==========================================================================
+   Spacing Utilities
+   ========================================================================== */
+.savage-m-0 { margin: 0; }
+.savage-m-1 { margin: var(--savage-space-1); }
+.savage-m-2 { margin: var(--savage-space-2); }
+.savage-m-4 { margin: var(--savage-space-4); }
+
+.savage-p-0 { padding: 0; }
+.savage-p-1 { padding: var(--savage-space-1); }
+.savage-p-2 { padding: var(--savage-space-2); }
+.savage-p-4 { padding: var(--savage-space-4); }
+
+/* ==========================================================================
+   Button Styles
+   ========================================================================== */
+.savage-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--savage-space-2);
+  padding: var(--savage-space-2) var(--savage-space-4);
+  font-size: var(--savage-text-base);
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--savage-white);
+  background-color: var(--savage-primary);
+  border: 1px solid transparent;
+  border-radius: var(--savage-radius-md);
+  cursor: pointer;
+  transition: all var(--savage-transition-fast);
+}
+
+.savage-btn:hover {
+  background-color: var(--savage-primary-dark);
+}
+
+.savage-btn:focus {
+  outline: 2px solid var(--savage-primary-light);
+  outline-offset: 2px;
+}
+
+.savage-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Button Variants */
+.savage-btn-secondary {
+  background-color: var(--savage-secondary);
+}
+
+.savage-btn-success {
+  background-color: var(--savage-success);
+}
+
+.savage-btn-error {
+  background-color: var(--savage-error);
+}
+
+.savage-btn-outline {
+  color: var(--savage-primary);
+  background-color: transparent;
+  border-color: var(--savage-primary);
+}
+
+.savage-btn-outline:hover {
+  color: var(--savage-white);
+  background-color: var(--savage-primary);
+}
+
+.savage-btn-sm {
+  padding: var(--savage-space-1) var(--savage-space-2);
+  font-size: var(--savage-text-sm);
+}
+
+.savage-btn-lg {
+  padding: var(--savage-space-3) var(--savage-space-6);
+  font-size: var(--savage-text-lg);
+}
+
+/* ==========================================================================
+   Form Styles
+   ========================================================================== */
+.savage-input,
+.savage-select,
+.savage-textarea {
+  display: block;
+  width: 100%;
+  padding: var(--savage-space-2) var(--savage-space-3);
+  font-size: var(--savage-text-base);
+  line-height: 1.5;
+  color: var(--savage-gray-900);
+  background-color: var(--savage-white);
+  border: 1px solid var(--savage-gray-300);
+  border-radius: var(--savage-radius-md);
+  transition: border-color var(--savage-transition-fast), box-shadow var(--savage-transition-fast);
+}
+
+.savage-input:focus,
+.savage-select:focus,
+.savage-textarea:focus {
+  outline: none;
+  border-color: var(--savage-primary);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
+}
+
+.savage-input:disabled,
+.savage-select:disabled,
+.savage-textarea:disabled {
+  background-color: var(--savage-gray-100);
+  cursor: not-allowed;
+}
+
+.savage-label {
+  display: block;
+  margin-bottom: var(--savage-space-1);
+  font-size: var(--savage-text-sm);
+  font-weight: 500;
+  color: var(--savage-gray-700);
+}
+
+/* ==========================================================================
+   Card Styles
+   ========================================================================== */
+.savage-card {
+  background-color: var(--savage-white);
+  border: 1px solid var(--savage-gray-200);
+  border-radius: var(--savage-radius-lg);
+  box-shadow: var(--savage-shadow-sm);
+}
+
+.savage-card-header {
+  padding: var(--savage-space-4);
+  border-bottom: 1px solid var(--savage-gray-200);
+}
+
+.savage-card-body {
+  padding: var(--savage-space-4);
+}
+
+.savage-card-footer {
+  padding: var(--savage-space-4);
+  border-top: 1px solid var(--savage-gray-200);
+}
+
+/* ==========================================================================
+   Alert Styles
+   ========================================================================== */
+.savage-alert {
+  padding: var(--savage-space-3) var(--savage-space-4);
+  border-radius: var(--savage-radius-md);
+  border-left: 4px solid transparent;
+}
+
+.savage-alert-info {
+  background-color: rgb(59 130 246 / 0.1);
+  border-left-color: var(--savage-info);
+  color: var(--savage-info);
+}
+
+.savage-alert-success {
+  background-color: rgb(34 197 94 / 0.1);
+  border-left-color: var(--savage-success);
+  color: var(--savage-success);
+}
+
+.savage-alert-warning {
+  background-color: rgb(245 158 11 / 0.1);
+  border-left-color: var(--savage-warning);
+  color: var(--savage-warning);
+}
+
+.savage-alert-error {
+  background-color: rgb(239 68 68 / 0.1);
+  border-left-color: var(--savage-error);
+  color: var(--savage-error);
+}
+
+/* ==========================================================================
+   Animation Utilities
+   ========================================================================== */
+@keyframes savage-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes savage-slide-up {
+  from { 
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.savage-animate-fade {
+  animation: savage-fade-in var(--savage-transition-base);
+}
+
+.savage-animate-slide {
+  animation: savage-slide-up var(--savage-transition-base);
+}
+
+/* ==========================================================================
+   Component-specific styles
+   ========================================================================== */
+
+/* Savage component wrapper */
+[data-savage] {
+  display: block;
+}
+
+/* Bind placeholders */
+[data-bind] {
+  transition: opacity var(--savage-transition-fast);
+}
+
+/* Action buttons */
+[data-action] {
+  cursor: pointer;
+}
+
+/* Conditional rendering placeholders */
+[data-if] {
+  display: none;
+}
+
+[data-if="true"] {
+  display: block;
+}
+
+/* ==========================================================================
+   Utility Classes
+   ========================================================================== */
+.savage-text-center { text-align: center; }
+.savage-text-left { text-align: left; }
+.savage-text-right { text-align: right; }
+
+.savage-font-bold { font-weight: 700; }
+.savage-font-medium { font-weight: 500; }
+.savage-font-normal { font-weight: 400; }
+
+.savage-rounded { border-radius: var(--savage-radius-md); }
+.savage-rounded-lg { border-radius: var(--savage-radius-lg); }
+.savage-rounded-full { border-radius: var(--savage-radius-full); }
+
+.savage-shadow { box-shadow: var(--savage-shadow-md); }
+.savage-shadow-lg { box-shadow: var(--savage-shadow-lg); }
+
+.savage-border { border: 1px solid var(--savage-gray-200); }

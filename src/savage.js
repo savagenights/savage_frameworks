@@ -1,0 +1,39 @@
+/**
+ * 🦁 Savage Frameworks - Main Entry Point
+ * 
+ * A lightweight, open-source HTML, CSS, and JavaScript framework
+ * for building reactive websites.
+ * 
+ * @version 0.1.0-alpha
+ * @author Savage Nights Collective
+ * @license MIT
+ * @repository https://github.com/savagenights/savage_frameworks.git
+ * 
+ * Standards:
+ * - HTML Living Standard: https://html.spec.whatwg.org/
+ * - CSS Snapshot 2023: https://www.w3.org/TR/css-2023/
+ * - ECMAScript 2025: https://ecma-international.org/publications-and-standards/standards/ecma-262/
+ * - DOM Living Standard: https://dom.spec.whatwg.org/
+ */
+
+// Core exports
+export { SavageApp, createApp } from './core/app.js';
+export { SavageComponent } from './core/component.js';
+export { SavageReactor, isReactive } from './core/reactor.js';
+export { SavageBinder } from './core/binder.js';
+export { VERSION, getVersion, BUILD_INFO } from './core/version.js';
+
+// Main SavageApp class as default export
+import { SavageApp, createApp } from './core/app.js';
+export default SavageApp;
+
+// Global API for CDN/script tag usage
+if (typeof window !== 'undefined') {
+  window.SavageApp = SavageApp;
+  window.SavageComponent = require('./core/component.js').SavageComponent;
+  window.SavageReactor = require('./core/reactor.js').SavageReactor;
+  window.createSavageApp = createApp;
+  window.SavageVERSION = require('./core/version.js').VERSION;
+  
+  console.log('🦁 Savage Frameworks v' + window.SavageVERSION + ' loaded');
+}

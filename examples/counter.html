@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savage Framework - Counter Example</title>
+    <link rel="stylesheet" href="../src/savage.css">
+    <style>
+        body {
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .example-title {
+            margin-bottom: 1.5rem;
+            color: var(--savage-primary);
+        }
+        .counter-display {
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        .counter-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="example-title">🦁 Savage Framework - Counter Example</h1>
+    
+    <div class="savage-card">
+        <div class="savage-card-header">
+            <h2>Counter Component</h2>
+            <p>Demonstrates reactive state and data binding</p>
+        </div>
+        
+        <div class="savage-card-body">
+            <!-- Declarative Component -->
+            <div data-savage="counter">
+                <div class="counter-display" data-bind="count">0</div>
+                
+                <div class="counter-controls">
+                    <button class="savage-btn savage-btn-error" data-action="decrement">-</button>
+                    <button class="savage-btn savage-btn-secondary" data-action="reset">Reset</button>
+                    <button class="savage-btn" data-action="increment">+</button>
+                </div>
+                
+                <div style="margin-top: 1.5rem;">
+                    <label class="savage-label">Step Size (two-way binding)</label>
+                    <input type="number" class="savage-input" data-model="step" value="1" min="1">
+                </div>
+                
+                <div style="margin-top: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.375rem;">
+                    <strong>Current Step:</strong> <span data-bind="step">1</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { SavageApp } from '../src/savage.js';
+        
+        // Create the counter component
+        const app = new SavageApp({ debug: true });
+        
+        app.component('counter', {
+            state: {
+                count: 0,
+                step: 1
+            },
+            actions: {
+                increment(state) {
+                    return { count: state.count + state.step };
+                },
+                decrement(state) {
+                    return { count: state.count - state.step };
+                },
+                reset(state) {
+                    return { count: 0 };
+                }
+            },
+            onCreated() {
+                console.log('Counter component created!');
+            },
+            onMounted(el) {
+                console.log('Counter mounted to:', el);
+            }
+        });
+        
+        // Mount all declarative components
+        app.mountAll();
+        
+        // Expose to window for debugging
+        window.savageApp = app;
+    </script>
+</body>
+</html>

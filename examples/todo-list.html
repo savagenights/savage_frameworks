@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savage Framework - Todo List Example</title>
+    <link rel="stylesheet" href="../src/savage.css">
+    <style>
+        body {
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--savage-gray-200);
+            transition: all 0.2s;
+        }
+        .todo-item:hover {
+            background: var(--savage-gray-50);
+        }
+        .todo-item.done {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+        .todo-checkbox {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+        }
+        .todo-text {
+            flex: 1;
+            cursor: pointer;
+        }
+        .todo-delete {
+            color: var(--savage-error);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.25rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .todo-item:hover .todo-delete {
+            opacity: 1;
+        }
+        .stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--savage-gray-100);
+            border-radius: var(--savage-radius-md);
+        }
+    </style>
+</head>
+<body>
+    <h1>🦁 Savage Framework - Todo List</h1>
+    
+    <div class="savage-card">
+        <div class="savage-card-header">
+            <h2>My Tasks</h2>
+        </div>
+        
+        <div class="savage-card-body">
+            <div data-savage="todo-list">
+                <!-- Input area -->
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                    <input 
+                        type="text" 
+                        class="savage-input" 
+                        data-model="newTodo" 
+                        placeholder="Add a new task..."
+                        style="flex: 1;"
+                    >
+                    <button class="savage-btn" data-action="addTodo">Add</button>
+                </div>
+                
+                <!-- Todo list -->
+                <div id="todo-container">
+                    <!-- Items will be rendered here by JavaScript -->
+                </div>
+                
+                <!-- Stats -->
+                <div class="stats">
+                    <span><strong>Total:</strong> <span data-bind="totalTodos">0</span></span>
+                    <span><strong>Completed:</strong> <span data-bind="completedTodos">0</span></span>
+                    <span><strong>Remaining:</strong> <span data-bind="remainingTodos">0</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { SavageApp, SavageComponent } from '../src/savage.js';
+        
+        const app = new SavageApp({ debug: true });
+        
+        // Create a programmatic component for the todo list
+        const todoList = new SavageComponent({
+            name: 'todo-list',
+            template: `
+                <div>
+                    <div id="todos-display"></div>
+                </div>
+            `,
+            state: {
+                todos: [
+                    { id: 1, text: 'Learn Savage Framework', done: false },
+                    { id: 2, text: 'Build something awesome', done: false }
+                ],
+                newTodo: '',
+                nextId: 3
+            },
+            actions: {
+                addTodo(state) {
+                    if (!state.newTodo.trim()) return;
+                    
+                    const newTodos = [...state.todos, {
+                        id: state.nextId,
+                        text: state.newTodo.trim(),
+                        done: false
+                    }];
+                    
+                    return {
+                        todos: newTodos,
+                        newTodo: '',
+                        nextId: state.nextId + 1
+                    };
+                },
+                
+                toggleTodo(state, todoId) {
+                    return {
+                        todos: state.todos.map(t => 
+                            t.id === todoId ? { ...t, done: !t.done } : t
+                        )
+                    };
+                },
+                
+                deleteTodo(state, todoId) {
+                    return {
+                        todos: state.todos.filter(t => t.id !== todoId)
+                    };
+                },
+                
+                clearCompleted(state) {
+                    return {
+                        todos: state.todos.filter(t => !t.done)
+                    };
+                }
+            },
+            
+            // Custom render for the todo list
+            onMounted(el) {
+                this.renderTodos();
+                
+                // Set up watchers for stats
+                this.reactor.watch(() => this.reactor.state.todos, () => {
+                    this.renderTodos();
+                    this.updateStats();
+                });
+                
+                this.updateStats();
+            },
+            
+            onUpdated() {
+                this.renderTodos();
+                this.updateStats();
+            }
+        });
+        
+        // Add custom methods for rendering
+        todoList.renderTodos = function() {
+            const container = document.getElementById('todos-display');
+            if (!container) return;
+            
+            const { todos } = this.getState();
+            
+            if (todos.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #94a3b8; padding: 2rem;">No tasks yet!</p>';
+                return;
+            }
+            
+            container.innerHTML = todos.map(todo => `
+                <div class="todo-item ${todo.done ? 'done' : ''}" data-todo-id="${todo.id}">
+                    <input 
+                        type="checkbox" 
+                        class="todo-checkbox" 
+                        ${todo.done ? 'checked' : ''}
+                        onchange="window.toggleTodo(${todo.id})"
+                    >
+                    <span class="todo-text" onclick="window.toggleTodo(${todo.id})">${todo.text}</span>
+                    <button class="todo-delete" onclick="window.deleteTodo(${todo.id})">×</button>
+                </div>
+            `).join('');
+        };
+        
+        todoList.updateStats = function() {
+            const { todos } = this.getState();
+            const total = todos.length;
+            const completed = todos.filter(t => t.done).length;
+            const remaining = total - completed;
+            
+            // Update the binding elements manually for stats
+            const totalEl = document.querySelector('[data-bind="totalTodos"]');
+            const completedEl = document.querySelector('[data-bind="completedTodos"]');
+            const remainingEl = document.querySelector('[data-bind="remainingTodos"]');
+            
+            if (totalEl) totalEl.textContent = total;
+            if (completedEl) completedEl.textContent = completed;
+            if (remainingEl) remainingEl.textContent = remaining;
+        };
+        
+        // Expose action handlers globally for the inline onclick handlers
+        window.toggleTodo = (id) => {
+            todoList.dispatch('toggleTodo', id);
+        };
+        
+        window.deleteTodo = (id) => {
+            todoList.dispatch('deleteTodo', id);
+        };
+        
+        // Register the component and mount
+        app.component('todo-list', todoList);
+        
+        // Mount to the container
+        const container = document.querySelector('[data-savage="todo-list"]');
+        if (container) {
+            // Clear and mount
+            todoList.mount(container);
+        }
+        
+        // Expose for debugging
+        window.savageApp = app;
+        window.todoList = todoList;
+    </script>
+</body>
+</html>
