@@ -175,15 +175,23 @@ export class SavageBinder {
    * @private
    */
   _bindData(el, path) {
+    console.log(`Binder._bindData: Binding ${path} to element`, el);
+    
     // Initial update
     const value = getByPath(this.reactor.state, path);
+    console.log(`Binder._bindData: Initial value for ${path}:`, value);
     this._updateElementContent(el, value);
 
     // Watch for changes
     const unsubscribe = this.reactor.watch(
-      () => getByPath(this.reactor.state, path),
+      () => {
+        const val = getByPath(this.reactor.state, path);
+        console.log(`Binder._bindData: Watcher checked ${path}, value:`, val);
+        return val;
+      },
       () => {
         const newValue = getByPath(this.reactor.state, path);
+        console.log(`Binder._bindData: Updating ${path} to:`, newValue);
         this._updateElementContent(el, newValue);
       }
     );
@@ -441,12 +449,16 @@ export class SavageBinder {
    * @private
    */
   _updateElementContent(el, value) {
+    console.log(`Binder._updateElementContent: Updating ${el.tagName} with value:`, value);
+    
     // Handle different input types
     if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
       this._setInputValue(el, value, el.tagName.toLowerCase(), el.type);
     } else {
       // Text content for regular elements
-      el.textContent = value != null ? value : '';
+      const newText = value != null ? value : '';
+      console.log(`Binder._updateElementContent: Setting textContent to "${newText}"`);
+      el.textContent = newText;
     }
   }
 
