@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🦁 Savage Frameworks - Kitchen Sink Demo</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦁</text></svg>">
-    <link rel="stylesheet" href="../src/savage.css">
+    <link rel="stylesheet" href="./src/savage.css">
     <style>
         /* Demo-specific styles */
         .demo-section {
@@ -365,7 +365,7 @@
             SavageApp, SavageComponent, SavageValidator, ValidationRules,
             createHttpClient, SavageStore, createRouter, shake, pulse,
             enter, leave, stagger, animate
-        } from '../src/savage.js';
+        } from './src/savage.js';
 
         // Initialize App
         const app = new SavageApp({ debug: true, autoMount: false });
@@ -628,7 +628,7 @@
         // 6. Router Setup
         // ============================================
         const router = createRouter({
-            base: '/demo/kitchen-sink.html'
+            base: '/'
         });
 
         // Route for the demo page itself (to prevent "no route found" error)
