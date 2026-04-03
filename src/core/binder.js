@@ -276,8 +276,8 @@ export class SavageBinder {
         const fn = this.component.actions?.[handlerName] || this.component[handlerName];
         
         if (typeof fn === 'function') {
-          // Get current state as first argument
-          const result = fn(this.reactor.getState(), e);
+          // Get current state as first argument, pass event and component
+          const result = fn(this.reactor.getState(), e, this.component);
           
           // If result is object, treat as state update
           if (result && typeof result === 'object' && !result._eventHandled) {
@@ -308,7 +308,8 @@ export class SavageBinder {
       
       if (typeof fn === 'function') {
         console.log(`Binder: Calling action "${actionName}"`);
-        const result = fn(this.reactor.getState());
+        // Pass state, event, and component reference
+        const result = fn(this.reactor.getState(), e, this.component);
         
         if (result && typeof result === 'object') {
           console.log(`Binder: Setting state with result`, result);
