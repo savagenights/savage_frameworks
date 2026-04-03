@@ -23,6 +23,9 @@ export { SavageReactor, isReactive } from './core/reactor.js';
 export { SavageBinder } from './core/binder.js';
 export { VERSION, getVersion, BUILD_INFO } from './core/version.js';
 
+// Import VERSION for use in this module
+import { VERSION } from './core/version.js';
+
 // Utilities
 export { SavageHttp, createHttpClient, http, ResponseUtils } from './utils/http.js';
 export { SavageValidator, ValidationRules, ErrorMessages, createValidator, validateElement } from './utils/validation.js';
