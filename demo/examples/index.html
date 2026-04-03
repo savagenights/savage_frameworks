@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦁 Savage Frameworks - Examples</title>
+    <link rel="stylesheet" href="../src/savage.css">
+    <style>
+        body { padding: 2rem; max-width: 800px; margin: 0 auto; }
+        .hero { text-align: center; padding: 3rem 0; }
+        .hero h1 { font-size: 2.5rem; color: var(--savage-primary); margin-bottom: 0.5rem; }
+        .hero p { color: var(--savage-gray-600); font-size: 1.125rem; }
+        .example-grid { display: grid; gap: 1.5rem; margin-top: 2rem; }
+        .example-card { 
+            display: block; 
+            padding: 1.5rem; 
+            border: 1px solid var(--savage-gray-200);
+            border-radius: var(--savage-radius-lg);
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s;
+        }
+        .example-card:hover {
+            border-color: var(--savage-primary);
+            box-shadow: var(--savage-shadow-md);
+        }
+        .example-card h3 { color: var(--savage-primary); margin-bottom: 0.5rem; }
+        .example-card p { color: var(--savage-gray-600); margin: 0; }
+        .version { 
+            position: fixed; 
+            bottom: 1rem; 
+            right: 1rem; 
+            padding: 0.5rem 1rem;
+            background: var(--savage-gray-100);
+            border-radius: var(--savage-radius-md);
+            font-size: var(--savage-text-sm);
+            color: var(--savage-gray-600);
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>🦁 Savage Frameworks</h1>
+        <p>A lightweight, open-source HTML, CSS, and JavaScript framework for building reactive websites.</p>
+    </div>
+    
+    <h2>Interactive Examples</h2>
+    <div class="example-grid">
+        <a href="counter.html" class="example-card">
+            <h3>Counter Demo</h3>
+            <p>Basic reactive state with increment/decrement. Demonstrates data-binding and actions.</p>
+        </a>
+        <a href="todo-list.html" class="example-card">
+            <h3>Todo List</h3>
+            <p>Full CRUD operations with component architecture. Shows list rendering and state management.</p>
+        </a>
+    </div>
+    
+    <div class="version">v0.1.0-alpha</div>
+</body>
+</html>

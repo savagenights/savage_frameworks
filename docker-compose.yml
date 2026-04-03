@@ -9,8 +9,6 @@
 #
 # Repository: https://github.com/savagenights/savage_frameworks.git
 
-version: '3.8'
-
 services:
   savage-demo:
     build:
