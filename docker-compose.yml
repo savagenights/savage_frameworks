@@ -1,0 +1,43 @@
+# 🦁 Savage Frameworks - Docker Compose
+#
+# Quick start for running the demo site locally
+# 
+# Usage:
+#   docker-compose up -d    # Start in background
+#   docker-compose down       # Stop the server
+#   docker-compose up --build # Rebuild and start
+#
+# Repository: https://github.com/savagenights/savage_frameworks.git
+
+version: '3.8'
+
+services:
+  savage-demo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: savage-frameworks-demo
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "app.name=Savage Frameworks"
+      - "app.version=0.1.0-alpha"
+      - "app.component=demo-server"
+
+# Optional: Add a watchtower service for auto-updates (uncomment if needed)
+#  watchtower:
+#    image: containrrr/watchtower
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#    command: --interval 3600 savage-demo
+#    restart: unless-stopped

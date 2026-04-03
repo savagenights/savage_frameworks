@@ -20,6 +20,19 @@ Savage Frameworks brings the power of reactive programming to vanilla web techno
 
 ---
 
+## 🐳 Docker Demo (Quickest)
+
+The fastest way to see Savage Frameworks in action:
+
+```bash
+# Clone and run
+git clone https://github.com/savagenights/savage_frameworks.git
+cd savage_frameworks
+docker-compose up -d
+
+# Visit http://localhost:8080
+```
+
 ## 📦 Installation
 
 ### Option 1: CDN (Quickest Start)
@@ -152,6 +165,51 @@ Savage Frameworks is built on living web standards:
 | DOM Living Standard | ✅ Full compliance |
 
 See [Technology Living Standards](./technology_living_standards.md) for full reference.
+
+---
+
+## 🐳 Docker Support
+
+### Quick Demo with Docker
+
+Run the demo site instantly with Docker:
+
+```bash
+# Start the demo server
+docker-compose up -d
+
+# Visit http://localhost:8080
+# - Interactive examples at /examples/
+# - Framework source at /src/
+
+# Stop the server
+docker-compose down
+
+# Rebuild after changes
+docker-compose up --build
+```
+
+### Docker Commands Reference
+
+| Command | Description |
+|---------|-------------|
+| `docker-compose up -d` | Start demo server in background |
+| `docker-compose down` | Stop and remove container |
+| `docker-compose up --build` | Rebuild image and start |
+| `docker-compose logs -f` | View live logs |
+| `docker-compose ps` | Check container status |
+
+### Building Manually
+
+```bash
+# Build image
+docker build -t savage-frameworks .
+
+# Run container
+docker run -p 8080:80 savage-frameworks
+
+# Access at http://localhost:8080
+```
 
 ---
 
