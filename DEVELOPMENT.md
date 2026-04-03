@@ -175,6 +175,7 @@ Before each commit:
 | Date | Change Type | Description | Reason | Impact |
 |------|-------------|-------------|--------|--------|
 | 2026-04 | Initial | Project created | New open-source framework | N/A |
+| 2026-04 | Infrastructure | Docker hot reloading | Development workflow improvement | Docker Compose |
 | 2026-04 | Feature Add | Kitchen Sink Demo | Comprehensive feature showcase | N/A |
 | 2026-04 | Infrastructure | Added Docker demo support | Easy framework demonstration | N/A |
 | 2026-04 | Scope Add | Core framework architecture | Foundation Phase 1 | Core reactivity system |
@@ -204,10 +205,13 @@ npm run lint
 npm run release
 ```
 
-### Docker Development
+### Docker Development (with HOT RELOADING)
 ```bash
-# Start demo server locally
+# Production mode - stable, cached
 docker-compose up -d
+
+# Development mode - HOT RELOAD, no caching
+docker-compose -f docker-compose.dev.yml up -d
 
 # View logs
 docker-compose logs -f
@@ -218,9 +222,24 @@ docker-compose up --build
 # Stop server
 docker-compose down
 
+# Development mode stop
+docker-compose -f docker-compose.dev.yml down
+
 # Clean up Docker resources
 docker system prune
 ```
+
+#### Docker Modes
+| Mode | Command | Use Case | Hot Reload |
+|------|---------|----------|------------|
+| **Production** | `docker-compose up -d` | Demo, deploy | ❌ No |
+| **Development** | `docker-compose -f docker-compose.dev.yml up -d` | Active coding | ✅ Yes |
+
+#### Hot Reload Details
+- Files in `src/`, `demo/`, `examples/` mounted as volumes
+- nginx caching completely disabled
+- Refresh browser to see changes
+- NO RESTART REQUIRED! 🚀
 
 ---
 

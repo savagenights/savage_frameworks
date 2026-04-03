@@ -45,9 +45,11 @@ docs/
 .gitlab-ci.yml
 .travis.yml
 
-# Docker files themselves (not needed in context)
-Dockerfile
+# Docker files (not needed in production build context)
 docker-compose.yml
+docker-compose.dev.yml
+nginx.dev.conf
+Dockerfile
 .dockerignore
 
 # Temporary files

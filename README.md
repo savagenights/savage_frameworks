@@ -33,6 +33,23 @@ docker-compose up -d
 # Visit http://localhost:8080
 ```
 
+### Option 4: Docker (Fastest Demo)
+
+```bash
+# Clone and run with Docker
+git clone https://github.com/savagenights/savage_frameworks.git
+cd savage_frameworks
+
+# Production mode (stable, cached)
+docker-compose up -d
+
+# OR Development mode (hot reload - no restart needed!)
+docker-compose -f docker-compose.dev.yml up -d
+
+# Visit http://localhost:8080
+# Edit files and refresh - changes appear immediately!
+```
+
 ## 📦 Installation
 
 ### Option 1: CDN (Quickest Start)

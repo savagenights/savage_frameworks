@@ -1,0 +1,36 @@
+# 🦁 Savage Frameworks - Development Docker Compose
+#
+# Development configuration with HOT RELOADING
+# Changes to local files are immediately reflected without restart!
+#
+# Usage:
+#   docker-compose -f docker-compose.dev.yml up -d    # Start with hot reload
+#   docker-compose -f docker-compose.dev.yml down       # Stop
+#
+# Repository: https://github.com/savagenights/savage_frameworks.git
+
+services:
+  savage-dev:
+    image: nginx:alpine
+    container_name: savage-frameworks-dev
+    ports:
+      - "8080:80"
+    volumes:
+      # Mount source directories for hot reloading
+      - ./src:/usr/share/nginx/html/src:ro
+      - ./demo:/usr/share/nginx/html/demo:ro
+      - ./examples:/usr/share/nginx/html/examples:ro
+      - ./demo/index.html:/usr/share/nginx/html/index.html:ro
+      # Mount nginx config
+      - ./nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    restart: unless-stopped
+    labels:
+      - "app.name=Savage Frameworks"
+      - "app.version=0.1.0-alpha"
+      - "app.component=dev-server"
+      - "app.mode=development"
+
+# Note: Using 'ro' (read-only) for safety - container can't modify host files
