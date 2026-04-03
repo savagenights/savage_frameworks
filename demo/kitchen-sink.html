@@ -688,12 +688,6 @@
             }
         });
 
-        // Catch-all route for demo page (suppresses router error)
-        router.route('*', {
-            title: 'Kitchen Sink Demo',
-            component: () => document.createElement('div') // No-op for demo page
-        });
-
         // Initialize router
         setTimeout(() => router.init(), 100);
 
