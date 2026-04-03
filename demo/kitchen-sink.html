@@ -180,7 +180,7 @@
                     <h3>Two-Way Binding</h3>
                     <div class="form-group">
                         <label for="userName" class="savage-label">Your Name</label>
-                        <input type="text" id="userName" name="userName" class="savage-input" data-model="name" placeholder="Type something...">
+                        <input type="text" id="userName" name="userName" class="savage-input" data-model="name" placeholder="Type something..." autocomplete="name">
                     </div>
                     <p>Hello, <span data-bind="name" style="font-weight: bold;">Stranger</span>!</p>
                 </div>
@@ -207,25 +207,25 @@
                 <form id="demo-form" style="max-width: 400px;">
                     <div class="form-group">
                         <label for="username" class="savage-label">Username *</label>
-                        <input type="text" id="username" name="username" class="savage-input" data-model="username" placeholder="min 3 characters">
+                        <input type="text" id="username" name="username" class="savage-input" data-model="username" placeholder="min 3 characters" autocomplete="username">
                         <div class="form-error" data-bind="errors.username"></div>
                     </div>
                     
                     <div class="form-group">
                         <label for="email" class="savage-label">Email *</label>
-                        <input type="email" id="email" name="email" class="savage-input" data-model="email" placeholder="your@email.com">
+                        <input type="email" id="email" name="email" class="savage-input" data-model="email" placeholder="your@email.com" autocomplete="email">
                         <div class="form-error" data-bind="errors.email"></div>
                     </div>
                     
                     <div class="form-group">
                         <label for="password" class="savage-label">Password *</label>
-                        <input type="password" id="password" name="password" class="savage-input" data-model="password" placeholder="min 6 characters">
+                        <input type="password" id="password" name="password" class="savage-input" data-model="password" placeholder="min 6 characters" autocomplete="new-password">
                         <div class="form-error" data-bind="errors.password"></div>
                     </div>
                     
                     <div class="form-group">
                         <label for="confirmPassword" class="savage-label">Confirm Password *</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" class="savage-input" data-model="confirmPassword" placeholder="same as password">
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="savage-input" data-model="confirmPassword" placeholder="same as password" autocomplete="new-password">
                         <div class="form-error" data-bind="errors.confirmPassword"></div>
                     </div>
                     
