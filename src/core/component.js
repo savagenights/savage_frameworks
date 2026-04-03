@@ -39,6 +39,9 @@ export class SavageComponent {
    * @param {Object} options.hooks - Lifecycle hooks
    */
   constructor(options = {}) {
+    console.log('Component: Creating with options:', Object.keys(options));
+    console.log('Component: Actions in options:', Object.keys(options.actions || {}));
+    
     // Core properties
     this.name = options.name || 'anonymous';
     this.version = VERSION;
