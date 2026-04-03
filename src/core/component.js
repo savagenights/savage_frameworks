@@ -222,9 +222,10 @@ export class SavageComponent {
   /**
    * Mount the component to a DOM element
    * @param {string|HTMLElement} target - Selector or element
+   * @param {boolean} declarative - Whether to preserve existing HTML (declarative mode)
    * @returns {HTMLElement} - The mounted element
    */
-  mount(target) {
+  mount(target, declarative = false) {
     if (this.isDestroyed) {
       throw new Error('Cannot mount destroyed component');
     }
@@ -238,12 +239,17 @@ export class SavageComponent {
       throw new Error(`Mount target not found: ${target}`);
     }
 
-    // Render component
-    this.element = this._render();
-    
-    // Clear target and append component
-    targetElement.innerHTML = '';
-    targetElement.appendChild(this.element);
+    if (declarative) {
+      // In declarative mode, use the existing HTML as-is
+      this.element = targetElement;
+    } else {
+      // Render component
+      this.element = this._render();
+      
+      // Clear target and append component
+      targetElement.innerHTML = '';
+      targetElement.appendChild(this.element);
+    }
 
     // Set up bindings
     this.binder.bind(this.element);
@@ -257,6 +263,7 @@ export class SavageComponent {
     // Set up update watcher
     this.reactor.watch(
       () => this.reactor.getState(),
+
       () => {
         this._invokeHook('onUpdated', this.element);
       }

@@ -148,9 +148,10 @@ export class SavageApp {
    * @param {string|HTMLElement} target - Selector or element
    * @param {string|SavageComponent} component - Component name or instance
    * @param {Object} props - Props to pass to component
+   * @param {boolean} declarative - Whether to preserve existing HTML (declarative mode)
    * @returns {SavageComponent}
    */
-  mount(target, component, props = {}) {
+  mount(target, component, props = {}, declarative = false) {
     const targetElement = typeof target === 'string'
       ? document.querySelector(target)
       : target;
@@ -170,7 +171,13 @@ export class SavageApp {
         return null;
       }
       
-      instance = new SavageComponent({ ...definition, props });
+      // For declarative mounting, use the existing HTML as template
+      if (declarative) {
+        const existingHTML = targetElement.innerHTML;
+        instance = new SavageComponent({ ...definition, props, template: existingHTML });
+      } else {
+        instance = new SavageComponent({ ...definition, props });
+      }
     } else if (component instanceof SavageComponent) {
       instance = component;
     } else {
@@ -179,7 +186,7 @@ export class SavageApp {
     }
 
     // Mount
-    instance.mount(targetElement);
+    instance.mount(targetElement, declarative);
     
     // Track
     this.mountedComponents.set(targetElement, instance);
@@ -224,7 +231,7 @@ export class SavageApp {
       const props = this._parseProps(el);
       
       if (componentRegistry.has(componentName)) {
-        this.mount(el, componentName, props);
+        this.mount(el, componentName, props, true); // true = declarative mode
       } else {
         console.warn(`SavageApp: Declarative component "${componentName}" not registered`);
       }
