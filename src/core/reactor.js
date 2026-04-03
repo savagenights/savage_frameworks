@@ -109,12 +109,8 @@ export class SavageReactor {
         }
         
         return true;
-      },
-
-      ownKeys() {
-        self._trackDependency(path || '*');
-        return Reflect.ownKeys(target);
       }
+
     });
   }
 
@@ -311,7 +307,31 @@ export class SavageReactor {
    * @returns {Object}
    */
   getState() {
-    return JSON.parse(JSON.stringify(this.state));
+    return this._deepClone(this.state);
+  }
+
+  /**
+   * Deep clone an object (works with Proxy)
+   * @param {Object} obj 
+   * @returns {Object}
+   * @private
+   */
+  _deepClone(obj) {
+    if (obj === null || typeof obj !== 'object') {
+      return obj;
+    }
+
+    if (Array.isArray(obj)) {
+      return obj.map(item => this._deepClone(item));
+    }
+
+    const cloned = {};
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        cloned[key] = this._deepClone(obj[key]);
+      }
+    }
+    return cloned;
   }
 
   /**
