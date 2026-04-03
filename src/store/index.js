@@ -388,7 +388,7 @@ export function createPersistencePlugin(options = {}) {
   const { key = 'savage-store', paths = [] } = options;
 
   return {
-    store => {
+    install(store) {
       // Restore state
       const saved = localStorage.getItem(key);
       if (saved) {
