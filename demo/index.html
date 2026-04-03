@@ -1,21 +1,719 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=/examples/">
-    <title>🦁 Savage Frameworks</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦁 Savage Frameworks - Kitchen Sink Demo</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦁</text></svg>">
+    <link rel="stylesheet" href="./src/savage.css">
     <style>
-        body { font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f8fafc; }
-        .container { text-align: center; }
-        h1 { color: #2563eb; margin-bottom: 1rem; }
-        a { color: #2563eb; text-decoration: none; }
-        a:hover { text-decoration: underline; }
+        /* Demo-specific styles */
+        .demo-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: var(--savage-radius-lg);
+            box-shadow: var(--savage-shadow-md);
+        }
+        
+        .demo-section h2 {
+            color: var(--savage-primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--savage-gray-200);
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .demo-card {
+            padding: 1.5rem;
+            border: 1px solid var(--savage-gray-200);
+            border-radius: var(--savage-radius-md);
+            background: var(--savage-gray-50);
+        }
+        
+        .demo-card h3 {
+            margin-bottom: 1rem;
+            color: var(--savage-gray-700);
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-error {
+            color: var(--savage-error);
+            font-size: var(--savage-text-sm);
+            margin-top: 0.25rem;
+        }
+        
+        .nav-demo {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: var(--savage-gray-100);
+            border-radius: var(--savage-radius-md);
+        }
+        
+        .nav-demo a {
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            color: var(--savage-gray-600);
+            border-radius: var(--savage-radius-sm);
+            transition: all 0.2s;
+        }
+        
+        .nav-demo a:hover,
+        .nav-demo a.active {
+            background: var(--savage-primary);
+            color: white;
+        }
+        
+        .route-content {
+            padding: 2rem;
+            background: var(--savage-gray-50);
+            border-radius: var(--savage-radius-md);
+            min-height: 200px;
+        }
+        
+        .animation-box {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--savage-primary), var(--savage-primary-light));
+            border-radius: var(--savage-radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .list-demo {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .list-demo li {
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            background: white;
+            border-radius: var(--savage-radius-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .store-state {
+            font-family: var(--savage-font-mono);
+            font-size: var(--savage-text-sm);
+            background: var(--savage-gray-900);
+            color: var(--savage-gray-100);
+            padding: 1rem;
+            border-radius: var(--savage-radius-md);
+            overflow-x: auto;
+        }
+        
+        .feature-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: var(--savage-primary-light);
+            color: white;
+            border-radius: var(--savage-radius-sm);
+            font-size: var(--savage-text-xs);
+            margin-right: 0.5rem;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>🦁 Savage Frameworks v0.1.0-alpha</h1>
-        <p>Redirecting to <a href="/examples/">examples</a>...</p>
+<body style="background: var(--savage-gray-100); padding: 2rem;">
+    <div class="savage-container">
+        <!-- Header -->
+        <header style="text-align: center; margin-bottom: 3rem;">
+            <h1 style="font-size: 3rem; color: var(--savage-primary); margin-bottom: 0.5rem;">
+                🦁 Savage Frameworks
+            </h1>
+            <p style="font-size: 1.25rem; color: var(--savage-gray-600);">
+                Kitchen Sink Demo - All Features
+            </p>
+            <div style="margin-top: 1rem;">
+                <span class="feature-badge">v0.1.0-alpha</span>
+                <span class="feature-badge">ES2025</span>
+                <span class="feature-badge">Proxy Reactivity</span>
+                <span class="feature-badge">Web Standards</span>
+            </div>
+        </header>
+
+        <!-- 1. Reactivity & Data Binding -->
+        <section class="demo-section" data-savage="reactivity-demo">
+            <h2>1. Reactivity & Data Binding</h2>
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>Text Binding</h3>
+                    <p>Count: <span data-bind="count" style="font-size: 2rem; font-weight: bold; color: var(--savage-primary);">0</span></p>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="savage-btn" data-action="increment">+</button>
+                        <button class="savage-btn savage-btn-error" data-action="decrement">-</button>
+                        <button class="savage-btn savage-btn-secondary" data-action="reset">Reset</button>
+                    </div>
+                </div>
+                
+                <div class="demo-card">
+                    <h3>Two-Way Binding</h3>
+                    <div class="form-group">
+                        <label for="userName" class="savage-label">Your Name</label>
+                        <input type="text" id="userName" name="userName" class="savage-input" data-model="name" placeholder="Type something..." autocomplete="name">
+                    </div>
+                    <p>Hello, <span data-bind="name" style="font-weight: bold;">Stranger</span>!</p>
+                </div>
+                
+                <div class="demo-card">
+                    <h3>Conditional Display</h3>
+                    <div class="form-group">
+                        <label for="showSecret" class="savage-label">
+                            <input type="checkbox" id="showSecret" name="showSecret" data-model="showSecret"> Show Secret Message
+                        </label>
+                    </div>
+                    <div data-bind="showSecret" style="padding: 1rem; background: var(--savage-success); color: white; border-radius: var(--savage-radius-md);" class="hidden">
+                        🎉 This is the secret message! Only visible when checkbox is checked.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Form Validation -->
+        <section class="demo-section" data-savage="validation-demo">
+            <h2>2. Form Validation</h2>
+            <div class="demo-card">
+                <h3>Registration Form</h3>
+                <form id="demo-form" style="max-width: 400px;">
+                    <div class="form-group">
+                        <label for="username" class="savage-label">Username *</label>
+                        <input type="text" id="username" name="username" class="savage-input" data-model="username" placeholder="min 3 characters" autocomplete="username">
+                        <div class="form-error" data-bind="errors.username"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="savage-label">Email *</label>
+                        <input type="email" id="email" name="email" class="savage-input" data-model="email" placeholder="your@email.com" autocomplete="email">
+                        <div class="form-error" data-bind="errors.email"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" class="savage-label">Password *</label>
+                        <input type="password" id="password" name="password" class="savage-input" data-model="password" placeholder="min 6 characters" autocomplete="new-password">
+                        <div class="form-error" data-bind="errors.password"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword" class="savage-label">Confirm Password *</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="savage-input" data-model="confirmPassword" placeholder="same as password" autocomplete="new-password">
+                        <div class="form-error" data-bind="errors.confirmPassword"></div>
+                    </div>
+                    
+                    <button type="button" class="savage-btn" data-action="validate">Validate Form</button>
+                    <div style="margin-top: 1rem; padding: 1rem; background: var(--savage-gray-100); border-radius: var(--savage-radius-md);">
+                        <strong>Validation Status:</strong> <span data-bind="validationStatus">Pending</span>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- 3. Animations -->
+        <section class="demo-section" data-savage="animation-demo">
+            <h2>3. Animations</h2>
+            <div class="demo-grid">
+                <div class="demo-card" style="text-align: center;">
+                    <h3>Transitions</h3>
+                    <div class="animation-box" data-bind="animationBox">Click Me</div>
+                    <div style="margin-top: 1rem; display: flex; gap: 0.5rem; justify-content: center;">
+                        <button class="savage-btn savage-btn-sm" data-action="shake">Shake</button>
+                        <button class="savage-btn savage-btn-sm" data-action="pulse">Pulse</button>
+                        <button class="savage-btn savage-btn-sm" data-action="flip">Flip</button>
+                    </div>
+                </div>
+                
+                <div class="demo-card">
+                    <h3>Show/Hide Animations</h3>
+                    <div class="form-group">
+                        <button class="savage-btn" data-action="toggleBox">Toggle with Fade</button>
+                    </div>
+                    <div data-bind="showBox" style="padding: 2rem; background: var(--savage-primary); color: white; border-radius: var(--savage-radius-md); text-align: center;" class="hidden">
+                        ✨ I fade in and out!
+                    </div>
+                </div>
+                
+                <div class="demo-card">
+                    <h3>Staggered List</h3>
+                    <button class="savage-btn savage-btn-sm" data-action="animateList">Animate List</button>
+                    <ul class="list-demo" style="margin-top: 1rem;">
+                        <li>Item 1</li>
+                        <li>Item 2</li>
+                        <li>Item 3</li>
+                        <li>Item 4</li>
+                        <li>Item 5</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. HTTP Client -->
+        <section class="demo-section" data-savage="http-demo">
+            <h2>4. HTTP Client</h2>
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>API Request Demo</h3>
+                    <button class="savage-btn" data-action="fetchUsers">Fetch Users (JSONPlaceholder)</button>
+                    <div style="margin-top: 1rem;">
+                        <div data-bind="loading" class="hidden">Loading...</div>
+                        <div data-bind="httpError" style="color: var(--savage-error);"></div>
+                        <div data-bind="users" style="margin-top: 1rem;">
+                            <ul class="list-demo"></ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-card">
+                    <h3>Request Info</h3>
+                    <div style="font-family: var(--savage-font-mono); font-size: var(--savage-text-sm); background: var(--savage-gray-800); color: var(--savage-gray-100); padding: 1rem; border-radius: var(--savage-radius-md);">
+                        <div>Status: <span data-bind="httpStatus">Idle</span></div>
+                        <div>Time: <span data-bind="httpTime">-</span>ms</div>
+                        <div>Items: <span data-bind="itemCount">0</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Global Store -->
+        <section class="demo-section" data-savage="store-demo">
+            <h2>5. Global Store</h2>
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>Store State</h3>
+                    <pre class="store-state" data-bind="storeDisplay">{ "count": 0 }</pre>
+                </div>
+                
+                <div class="demo-card">
+                    <h3>Mutations</h3>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button class="savage-btn savage-btn-sm" data-action="storeIncrement">Increment</button>
+                        <button class="savage-btn savage-btn-sm savage-btn-error" data-action="storeDecrement">Decrement</button>
+                        <button class="savage-btn savage-btn-sm savage-btn-secondary" data-action="storeReset">Reset</button>
+                        <button class="savage-btn savage-btn-sm" data-action="storeDouble">Double</button>
+                    </div>
+                </div>
+                
+                <div class="demo-card">
+                    <h3>Getters</h3>
+                    <div style="padding: 1rem; background: var(--savage-gray-100); border-radius: var(--savage-radius-md);">
+                        <div>Count: <span data-bind="storeCount">0</span></div>
+                        <div>Double: <span data-bind="storeDouble">0</span></div>
+                        <div>Is Even: <span data-bind="storeIsEven">true</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Router -->
+        <section class="demo-section">
+            <h2>6. Router</h2>
+            <div class="demo-card">
+                <h3>SPA Navigation</h3>
+                <nav class="nav-demo">
+                    <a href="/home" data-router-link>Home</a>
+                    <a href="/about" data-router-link>About</a>
+                    <a href="/contact" data-router-link>Contact</a>
+                    <a href="/user/123" data-router-link>User Profile</a>
+                </nav>
+                <div class="route-content" data-router-outlet>
+                    <p>Click a link above to navigate</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer style="text-align: center; padding: 2rem; color: var(--savage-gray-500);">
+            <p>🦁 Savage Frameworks v0.1.0-alpha | Built with web standards</p>
+            <p>
+                <a href="https://github.com/savagenights/savage_frameworks" target="_blank" style="color: var(--savage-primary);">
+                    View on GitHub →
+                </a>
+            </p>
+        </footer>
     </div>
+
+    <script type="module">
+        import {
+            SavageApp, SavageComponent, SavageValidator, ValidationRules,
+            createHttpClient, SavageStore, createRouter, shake, pulse,
+            enter, leave, stagger, animate
+        } from './src/savage.js';
+
+        // Initialize App
+        const app = new SavageApp({ debug: true, autoMount: false });
+
+        // ============================================
+        // 1. Reactivity Demo
+        // ============================================
+        app.component('reactivity-demo', {
+            state: {
+                count: 0,
+                name: '',
+                showSecret: false
+            },
+            actions: {
+                increment: (state) => ({ count: state.count + 1 }),
+                decrement: (state) => ({ count: state.count - 1 }),
+                reset: () => ({ count: 0 })
+            },
+            onMounted() {
+                console.log('Reactivity demo mounted');
+            }
+        });
+
+        // ============================================
+        // 2. Validation Demo
+        // ============================================
+        const validator = new SavageValidator({
+            username: [
+                { rule: 'required', message: 'Username is required' },
+                { rule: 'minLength', params: [3], message: 'Username must be at least 3 characters' }
+            ],
+            email: [
+                { rule: 'required', message: 'Email is required' },
+                { rule: 'email', message: 'Please enter a valid email' }
+            ],
+            password: [
+                { rule: 'required', message: 'Password is required' },
+                { rule: 'minLength', params: [6], message: 'Password must be at least 6 characters' }
+            ],
+            confirmPassword: [
+                { rule: 'required', message: 'Please confirm your password' },
+                { rule: 'match', params: ['password'], message: 'Passwords do not match' }
+            ]
+        });
+
+        app.component('validation-demo', {
+            state: {
+                username: '',
+                email: '',
+                password: '',
+                confirmPassword: '',
+                errors: {},
+                validationStatus: 'Pending'
+            },
+            actions: {
+                validate: (state) => {
+                    const formData = {
+                        username: state.username,
+                        email: state.email,
+                        password: state.password,
+                        confirmPassword: state.confirmPassword
+                    };
+                    
+                    const result = validator.validate(formData);
+                    
+                    if (result.isValid) {
+                        return {
+                            errors: {},
+                            validationStatus: '✅ Valid!'
+                        };
+                    } else {
+                        return {
+                            errors: result.errors,
+                            validationStatus: '❌ Invalid - check errors above'
+                        };
+                    }
+                }
+            }
+        });
+
+        // ============================================
+        // 3. Animation Demo
+        // ============================================
+        app.component('animation-demo', {
+            state: {
+                showBox: false,
+                animationBox: 'Click Me'
+            },
+            actions: {
+                shake: (state, _, component) => {
+                    const box = component.element.querySelector('.animation-box');
+                    shake(box);
+                    return state;
+                },
+                pulse: (state, _, component) => {
+                    const box = component.element.querySelector('.animation-box');
+                    pulse(box);
+                    return state;
+                },
+                flip: (state, _, component) => {
+                    const box = component.element.querySelector('.animation-box');
+                    animate(box, [
+                        { transform: 'rotateY(0deg)' },
+                        { transform: 'rotateY(360deg)' }
+                    ], { duration: 600 });
+                    return state;
+                },
+                toggleBox: (state) => {
+                    const newState = !state.showBox;
+                    const box = document.querySelector('[data-bind="showBox"]');
+                    
+                    if (newState) {
+                        box.classList.remove('hidden');
+                        enter(box, 'fade');
+                    } else {
+                        leave(box, 'fade').then(() => {
+                            box.classList.add('hidden');
+                        });
+                    }
+                    
+                    return { showBox: newState };
+                },
+                animateList: (state, _, component) => {
+                    const items = component.element.querySelectorAll('.list-demo li');
+                    stagger(items, [
+                        { opacity: 0, transform: 'translateX(-20px)' },
+                        { opacity: 1, transform: 'translateX(0)' }
+                    ], { duration: 300, stagger: 100 });
+                    return state;
+                }
+            }
+        });
+
+        // ============================================
+        // 4. HTTP Demo
+        // ============================================
+        const http = createHttpClient({
+            baseURL: 'https://jsonplaceholder.typicode.com'
+        });
+
+        app.component('http-demo', {
+            state: {
+                loading: false,
+                users: [],
+                httpError: '',
+                httpStatus: 'Idle',
+                httpTime: '-',
+                itemCount: 0
+            },
+            actions: {
+                fetchUsers: async (state, _, component) => {
+                    component.setState({
+                        loading: true,
+                        httpStatus: 'Loading...',
+                        httpError: ''
+                    });
+
+                    const startTime = performance.now();
+
+                    try {
+                        const response = await http.get('/users');
+                        const users = await response.json();
+                        const endTime = performance.now();
+
+                        component.setState({
+                            loading: false,
+                            users: users.slice(0, 5), // Just first 5
+                            httpStatus: '✅ Success',
+                            httpTime: Math.round(endTime - startTime),
+                            itemCount: users.length
+                        });
+
+                        // Update the list display
+                        const listEl = component.element.querySelector('.list-demo');
+                        if (listEl) {
+                            listEl.innerHTML = users.slice(0, 5).map(user => `
+                                <li style="animation: fadeIn 0.3s ease-out;">
+                                    <span>${user.name}</span>
+                                    <span style="color: var(--savage-gray-500); font-size: var(--savage-text-sm);">${user.email}</span>
+                                </li>
+                            `).join('');
+                        }
+                    } catch (error) {
+                        component.setState({
+                            loading: false,
+                            httpStatus: '❌ Error',
+                            httpError: error.message
+                        });
+                    }
+                }
+            }
+        });
+
+        // ============================================
+        // 5. Store Demo
+        // ============================================
+        const store = new SavageStore({
+            state: {
+                count: 0
+            },
+            mutations: {
+                increment(state) {
+                    state.count++;
+                },
+                decrement(state) {
+                    state.count--;
+                },
+                reset(state) {
+                    state.count = 0;
+                },
+                double(state) {
+                    state.count *= 2;
+                }
+            },
+            getters: {
+                doubleCount: (state) => state.count * 2,
+                isEven: (state) => state.count % 2 === 0
+            }
+        });
+
+        app.component('store-demo', {
+            state: {
+                storeDisplay: '{ "count": 0 }',
+                storeCount: 0,
+                storeDouble: 0,
+                storeIsEven: 'true'
+            },
+            onCreated() {
+                // Subscribe to store changes
+                store.subscribe((state) => {
+                    this.setState({
+                        storeDisplay: JSON.stringify(state, null, 2),
+                        storeCount: state.count,
+                        storeDouble: store.getters.doubleCount,
+                        storeIsEven: store.getters.isEven ? 'Yes' : 'No'
+                    });
+                });
+            },
+            actions: {
+                storeIncrement: (state) => {
+                    store.commit('increment');
+                    return state;
+                },
+                storeDecrement: (state) => {
+                    store.commit('decrement');
+                    return state;
+                },
+                storeReset: (state) => {
+                    store.commit('reset');
+                    return state;
+                },
+                storeDouble: (state) => {
+                    store.commit('double');
+                    return state;
+                }
+            }
+        });
+
+        // ============================================
+        // 6. Router Setup
+        // ============================================
+        const router = createRouter({
+            base: '/'
+        });
+
+        // Route for the demo page itself (to prevent "no route found" error)
+        router.route('/', {
+            title: 'Kitchen Sink Demo - Savage Frameworks',
+            component: () => {
+                // Return the existing demo content
+                const content = document.querySelector('.demo-container');
+                return content || document.createElement('div');
+            }
+        });
+
+        router.route('/home', {
+            title: 'Home - Savage Frameworks',
+            component: () => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <h3>🏠 Home</h3>
+                    <p>Welcome to Savage Frameworks! This is the home route.</p>
+                    <p>The router uses the History API for seamless navigation without page reloads.</p>
+                `;
+                return div;
+            }
+        });
+
+        router.route('/about', {
+            title: 'About - Savage Frameworks',
+            component: () => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <h3>ℹ️ About</h3>
+                    <p>Savage Frameworks is a lightweight, standards-compliant reactive framework.</p>
+                    <ul>
+                        <li>✅ No dependencies</li>
+                        <li>✅ Proxy-based reactivity</li>
+                        <li>✅ Web standards compliant</li>
+                        <li>✅ ES2025+ features</li>
+                    </ul>
+                `;
+                return div;
+            }
+        });
+
+        router.route('/contact', {
+            title: 'Contact - Savage Frameworks',
+            component: () => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <h3>📧 Contact</h3>
+                    <p>Get in touch with the Savage Nights Collective.</p>
+                    <p><a href="https://github.com/savagenights/savage_frameworks">GitHub Repository</a></p>
+                `;
+                return div;
+            }
+        });
+
+        router.route('/user/:id', {
+            title: 'User Profile - Savage Frameworks',
+            component: (props) => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <h3>👤 User Profile</h3>
+                    <p>User ID: <strong>${props.params.id}</strong></p>
+                    <p>This route uses dynamic parameters (:id) extracted from the URL.</p>
+                `;
+                return div;
+            }
+        });
+
+        // Initialize router
+        setTimeout(() => router.init(), 100);
+
+        // ============================================
+        // Mount all components
+        // ============================================
+        app.mountAll();
+
+        // Expose to window for debugging
+        window.savageApp = app;
+        window.savageStore = store;
+        window.savageRouter = router;
+        window.savageHttp = http;
+
+        console.log('🦁 Kitchen Sink Demo loaded!');
+        console.log('Available globals: savageApp, savageStore, savageRouter, savageHttp');
+    </script>
 </body>
 </html>
