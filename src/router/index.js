@@ -98,6 +98,11 @@ export class SavageRouter {
 
     // Set up listeners
     this._setupListeners();
+    
+    // Disable browser auto-scrolling on history changes
+    if (window.history.scrollRestoration) {
+      window.history.scrollRestoration = 'manual';
+    }
   }
 
   /**
@@ -119,6 +124,13 @@ export class SavageRouter {
    */
   handlePopState(event) {
     this._resolve(window.location.pathname + window.location.search);
+    
+    // Restore scroll position from history state
+    if (event.state && event.state._scrollX !== undefined) {
+      setTimeout(() => {
+        window.scrollTo(event.state._scrollX, event.state._scrollY);
+      }, 0);
+    }
   }
 
   /**
@@ -193,6 +205,10 @@ export class SavageRouter {
    */
   navigate(path, options = {}) {
     const { replace = false, state = {} } = options;
+    
+    // Save current scroll position to state
+    state._scrollX = window.scrollX || window.pageXOffset;
+    state._scrollY = window.scrollY || window.pageYOffset;
 
     // Update history
     if (replace) {
