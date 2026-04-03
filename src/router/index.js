@@ -348,6 +348,10 @@ export class SavageRouter {
     const outlet = document.querySelector('[data-router-outlet]') || 
                    document.querySelector('#router-outlet') ||
                    document.body;
+    
+    // Save current scroll position
+    const scrollX = window.scrollX || window.pageXOffset;
+    const scrollY = window.scrollY || window.pageYOffset;
 
     if (typeof component === 'function') {
       // Check if component is a constructor (class) or a factory function
@@ -389,6 +393,9 @@ export class SavageRouter {
       // HTML template
       outlet.innerHTML = component;
     }
+    
+    // Restore scroll position to prevent jump
+    window.scrollTo(scrollX, scrollY);
   }
 
   /**
