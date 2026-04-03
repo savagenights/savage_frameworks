@@ -16,11 +16,15 @@ services:
     ports:
       - "8080:80"
     volumes:
-      # Mount source directories for hot reloading
+      # Mount entire project root for hot reloading
+      # (nginx serves from /usr/share/nginx/html)
       - ./src:/usr/share/nginx/html/src:ro
       - ./demo:/usr/share/nginx/html/demo:ro
       - ./examples:/usr/share/nginx/html/examples:ro
       - ./demo/index.html:/usr/share/nginx/html/index.html:ro
+      - ./README.md:/usr/share/nginx/html/README.md:ro
+      - ./LICENSE:/usr/share/nginx/html/LICENSE:ro
+      - ./technology_living_standards.md:/usr/share/nginx/html/technology_living_standards.md:ro
       # Mount nginx config
       - ./nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
     environment:
@@ -34,3 +38,4 @@ services:
       - "app.mode=development"
 
 # Note: Using 'ro' (read-only) for safety - container can't modify host files
+# Hot reload: Edit files locally, refresh browser to see changes immediately!
