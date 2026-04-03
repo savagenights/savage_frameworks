@@ -60,17 +60,16 @@ export class SavageReactor {
     }
 
     const self = this;
-    const reactiveObj = {};
-
-    // Mark as reactive
-    Object.defineProperty(reactiveObj, REACTIVE_SYMBOL, {
+    
+    // Mark target as reactive (non-enumerable so it doesn't appear in iteration)
+    Object.defineProperty(target, REACTIVE_SYMBOL, {
       value: true,
       enumerable: false,
       writable: false
     });
 
-    // Proxy all properties
-    return new Proxy(reactiveObj, {
+    // Proxy the target directly
+    return new Proxy(target, {
       get(obj, prop) {
         if (prop === REACTIVE_SYMBOL) return true;
         
