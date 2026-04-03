@@ -33,75 +33,64 @@
             console.log(msg);
         };
 
-        try {
-            log('Step 1: Importing SavageApp...');
-            const { SavageApp } = await import('../src/savage.js');
-            log('Step 2: SavageApp imported');
+        async function init() {
+            try {
+                log('Step 1: Importing SavageApp...');
+                const { SavageApp } = await import('../src/savage.js');
+                log('Step 2: SavageApp imported');
 
-            log('Step 3: Creating app...');
-            const app = new SavageApp({ debug: true });
-            log('Step 4: App created');
+                log('Step 3: Creating app...');
+                const app = new SavageApp({ debug: true });
+                log('Step 4: App created');
 
-            log('Step 5: Registering component...');
-            app.component('minimal-test', {
-                state: { count: 0 },
-                actions: {
-                    increment: (state) => {
-                        console.log('increment action', state);
-                        return { count: state.count + 1 };
-                    },
-                    decrement: (state) => {
-                        console.log('decrement action', state);
-                        return { count: state.count - 1 };
+                log('Step 5: Registering component...');
+                app.component('minimal-test', {
+                    state: { count: 0 },
+                    actions: {
+                        increment: (state) => {
+                            console.log('increment action', state);
+                            return { count: state.count + 1 };
+                        },
+                        decrement: (state) => {
+                            console.log('decrement action', state);
+                            return { count: state.count - 1 };
+                        }
+                    }
+                });
+                log('Step 6: Component registered');
+
+                log('Step 7: Calling mountAll...');
+                app.mountAll();
+                log('Step 8: mountAll completed');
+
+                // Check what got mounted
+                const mounted = Array.from(app.mountedComponents.entries());
+                log(`Step 9: Mounted components: ${mounted.length}`);
+
+                if (mounted.length > 0) {
+                    const [el, instance] = mounted[0];
+                    log(`Step 10: Component element: ${el.tagName}`);
+                    log(`Step 11: Component state: ${JSON.stringify(instance.getState())}`);
+                    
+                    // Try clicking programmatically
+                    const btn = el.querySelector('[data-action="increment"]');
+                    if (btn) {
+                        log('Step 12: Found increment button');
+                        log(`Step 13: Button has onclick: ${btn.onclick !== null}`);
+                    } else {
+                        log('Step 12: ERROR - Button not found', true);
                     }
                 }
-            });
-            log('Step 6: Component registered');
 
-            log('Step 7: Calling mountAll...');
-            app.mountAll();
-            log('Step 8: mountAll completed');
+                window.testApp = app;
 
-            // Check what got mounted
-            const mounted = Array.from(app.mountedComponents.entries());
-            log(`Step 9: Mounted components: ${mounted.length}`);
-
-            if (mounted.length > 0) {
-                const [el, instance] = mounted[0];
-                log(`Step 10: Component element: ${el.tagName}`);
-                log(`Step 11: Component state: ${JSON.stringify(instance.getState())}`);
-                
-                // Try clicking programmatically
-                const btn = el.querySelector('[data-action="increment"]');
-                if (btn) {
-                    log('Step 12: Found increment button');
-                    
-                    // Check if listener is attached
-                    const listeners = getEventListeners(btn);
-                    log(`Step 13: Button click listeners: ${listeners ? listeners.length : 'unknown'}`);
-                } else {
-                    log('Step 12: ERROR - Button not found', true);
-                }
+            } catch (err) {
+                log(`FATAL ERROR: ${err.message}`, true);
+                console.error(err);
             }
-
-            // Add manual test button
-            const manualBtn = document.createElement('button');
-            manualBtn.textContent = 'Manual Test (bypass actions)';
-            manualBtn.className = 'savage-btn savage-btn-secondary';
-            manualBtn.onclick = () => {
-                const span = document.querySelector('[data-bind="count"]');
-                if (span) {
-                    const current = parseInt(span.textContent) || 0;
-                    span.textContent = current + 1;
-                    log(`Manual: Changed count to ${current + 1}`);
-                }
-            };
-            document.body.appendChild(manualBtn);
-
-        } catch (err) {
-            log(`FATAL ERROR: ${err.message}`, true);
-            console.error(err);
         }
+
+        init();
     </script>
 </body>
 </html>
