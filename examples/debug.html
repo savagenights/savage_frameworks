@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEBUG - Savage Framework</title>
+    <link rel="stylesheet" href="../src/savage.css">
+    <style>
+        body { padding: 2rem; font-family: system-ui, sans-serif; }
+        .debug-output { 
+            margin-top: 1rem; 
+            padding: 1rem; 
+            background: #f0f0f0; 
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .error { color: red; background: #fee2e2; }
+        .success { color: green; background: #d1fae5; }
+    </style>
+</head>
+<body>
+    <h1>🦁 DEBUG - Savage Framework</h1>
+    
+    <div id="test-container" data-savage="debug-counter">
+        <p>Count: <span data-bind="count">0</span></p>
+        <button data-action="increment">+</button>
+        <button data-action="decrement">-</button>
+    </div>
+
+    <div id="debug-log" class="debug-output">Waiting for framework...</div>
+
+    <script type="module">
+        const log = (msg, type = 'info') => {
+            const el = document.getElementById('debug-log');
+            const line = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            if (type === 'error') {
+                el.innerHTML += `<div class="error">${line}</div>`;
+            } else if (type === 'success') {
+                el.innerHTML += `<div class="success">${line}</div>`;
+            } else {
+                el.innerHTML += `<div>${line}</div>`;
+            }
+            console.log(line);
+        };
+
+        try {
+            log('Starting import...');
+            
+            import('../src/savage.js').then(module => {
+                log('Module imported successfully', 'success');
+                
+                const { SavageApp } = module;
+                log('SavageApp extracted');
+                
+                // Create app
+                const app = new SavageApp({ debug: true });
+                log('App created');
+                
+                // Register component
+                app.component('debug-counter', {
+                    state: { count: 0 },
+                    actions: {
+                        increment: (state) => {
+                            log(`Action: increment called with count=${state.count}`);
+                            return { count: state.count + 1 };
+                        },
+                        decrement: (state) => {
+                            log(`Action: decrement called with count=${state.count}`);
+                            return { count: state.count - 1 };
+                        }
+                    },
+                    onCreated() {
+                        log('Component created');
+                    },
+                    onMounted(el) {
+                        log('Component mounted', 'success');
+                        
+                        // Check if binding works
+                        setTimeout(() => {
+                            const countEl = el.querySelector('[data-bind="count"]');
+                            if (countEl) {
+                                log(`Initial count display: ${countEl.textContent}`);
+                            }
+                        }, 100);
+                    }
+                });
+                
+                log('Component registered');
+                
+                // Mount
+                log('Calling mountAll()...');
+                app.mountAll();
+                log('mountAll() completed', 'success');
+                
+                // Test state change
+                setTimeout(() => {
+                    log('Testing manual state change...');
+                    const instance = app.mountedComponents.values().next().value;
+                    if (instance) {
+                        log(`Current state: ${JSON.stringify(instance.getState())}`);
+                        
+                        // Try manual setState
+                        instance.setState({ count: 5 });
+                        setTimeout(() => {
+                            log(`After setState: ${JSON.stringify(instance.getState())}`);
+                            const countEl = document.querySelector('[data-bind="count"]');
+                            if (countEl) {
+                                log(`Display after setState: ${countEl.textContent}`);
+                            }
+                        }, 100);
+                    } else {
+                        log('No mounted instance found', 'error');
+                    }
+                }, 500);
+                
+                // Expose for console debugging
+                window.debugApp = app;
+                
+            }).catch(err => {
+                log(`Import error: ${err.message}`, 'error');
+                console.error(err);
+            });
+        } catch (err) {
+            log(`Fatal error: ${err.message}`, 'error');
+            console.error(err);
+        }
+    </script>
+</body>
+</html>

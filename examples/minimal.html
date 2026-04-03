@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Test - Savage Framework</title>
+    <link rel="stylesheet" href="../src/savage.css">
+    <style>
+        body { padding: 2rem; font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; }
+        .test-box { padding: 1rem; margin: 1rem 0; background: #f0f0f0; border-radius: 8px; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>🦁 Minimal Test</h1>
+    
+    <div id="output"></div>
+
+    <div id="test-component" data-savage="minimal-test">
+        <p>Count: <span data-bind="count">0</span></p>
+        <button data-action="increment" class="savage-btn">+</button>
+        <button data-action="decrement" class="savage-btn savage-btn-error">-</button>
+    </div>
+
+    <script type="module">
+        const output = document.getElementById('output');
+        const log = (msg, isError = false) => {
+            const div = document.createElement('div');
+            div.className = 'test-box';
+            div.innerHTML = `<span class="${isError ? 'error' : 'success'}">${isError ? '❌' : '✅'} ${msg}</span>`;
+            output.appendChild(div);
+            console.log(msg);
+        };
+
+        try {
+            log('Step 1: Importing SavageApp...');
+            const { SavageApp } = await import('../src/savage.js');
+            log('Step 2: SavageApp imported');
+
+            log('Step 3: Creating app...');
+            const app = new SavageApp({ debug: true });
+            log('Step 4: App created');
+
+            log('Step 5: Registering component...');
+            app.component('minimal-test', {
+                state: { count: 0 },
+                actions: {
+                    increment: (state) => {
+                        console.log('increment action', state);
+                        return { count: state.count + 1 };
+                    },
+                    decrement: (state) => {
+                        console.log('decrement action', state);
+                        return { count: state.count - 1 };
+                    }
+                }
+            });
+            log('Step 6: Component registered');
+
+            log('Step 7: Calling mountAll...');
+            app.mountAll();
+            log('Step 8: mountAll completed');
+
+            // Check what got mounted
+            const mounted = Array.from(app.mountedComponents.entries());
+            log(`Step 9: Mounted components: ${mounted.length}`);
+
+            if (mounted.length > 0) {
+                const [el, instance] = mounted[0];
+                log(`Step 10: Component element: ${el.tagName}`);
+                log(`Step 11: Component state: ${JSON.stringify(instance.getState())}`);
+                
+                // Try clicking programmatically
+                const btn = el.querySelector('[data-action="increment"]');
+                if (btn) {
+                    log('Step 12: Found increment button');
+                    
+                    // Check if listener is attached
+                    const listeners = getEventListeners(btn);
+                    log(`Step 13: Button click listeners: ${listeners ? listeners.length : 'unknown'}`);
+                } else {
+                    log('Step 12: ERROR - Button not found', true);
+                }
+            }
+
+            // Add manual test button
+            const manualBtn = document.createElement('button');
+            manualBtn.textContent = 'Manual Test (bypass actions)';
+            manualBtn.className = 'savage-btn savage-btn-secondary';
+            manualBtn.onclick = () => {
+                const span = document.querySelector('[data-bind="count"]');
+                if (span) {
+                    const current = parseInt(span.textContent) || 0;
+                    span.textContent = current + 1;
+                    log(`Manual: Changed count to ${current + 1}`);
+                }
+            };
+            document.body.appendChild(manualBtn);
+
+        } catch (err) {
+            log(`FATAL ERROR: ${err.message}`, true);
+            console.error(err);
+        }
+    </script>
+</body>
+</html>

@@ -100,14 +100,23 @@ export class SavageBinder {
    * @param {HTMLElement} rootElement 
    */
   bind(rootElement) {
-    if (!rootElement) return;
+    if (!rootElement) {
+      console.log('Binder: No root element provided');
+      return;
+    }
+
+    console.log('Binder: Starting bind on element', rootElement);
 
     // Find all elements with directives
     const elements = this._findDirectiveElements(rootElement);
+    console.log(`Binder: Found ${elements.length} elements with directives`);
     
-    elements.forEach(el => {
+    elements.forEach((el, i) => {
+      console.log(`Binder: Processing element ${i}:`, el.tagName, el.outerHTML.substring(0, 100));
       this._processElement(el);
     });
+    
+    console.log('Binder: Bind complete');
   }
 
   /**
@@ -283,22 +292,29 @@ export class SavageBinder {
    * @private
    */
   _bindAction(el, actionName) {
+    console.log(`Binder: Binding action "${actionName}" to element`, el);
+    
     const handler = (e) => {
+      console.log(`Binder: Action "${actionName}" triggered`);
       const fn = this.component.actions?.[actionName];
       
       if (typeof fn === 'function') {
+        console.log(`Binder: Calling action "${actionName}"`);
         const result = fn(this.reactor.getState());
         
         if (result && typeof result === 'object') {
+          console.log(`Binder: Setting state with result`, result);
           this.reactor.setState(result);
         }
       } else {
-        console.warn(`SavageBinder: Action "${actionName}" not found`);
+        console.warn(`SavageBinder: Action "${actionName}" not found in component`);
+        console.log('Available actions:', Object.keys(this.component.actions || {}));
       }
     };
 
     el.addEventListener('click', handler);
     this.eventListeners.push({ el, type: 'click', handler });
+    console.log(`Binder: Click listener attached for "${actionName}"`);
   }
 
   /**
