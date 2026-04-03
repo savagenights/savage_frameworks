@@ -57,11 +57,7 @@ export default SavageApp;
 
 // Global API for CDN/script tag usage
 if (typeof window !== 'undefined') {
-  window.SavageApp = SavageApp;
-  window.SavageComponent = require('./core/component.js').SavageComponent;
-  window.SavageReactor = require('./core/reactor.js').SavageReactor;
-  window.createSavageApp = createApp;
-  window.SavageVERSION = require('./core/version.js').VERSION;
-  
-  console.log('🦁 Savage Frameworks v' + window.SavageVERSION + ' loaded');
+  // For ES modules in browser, we need to use dynamic imports
+  // or load from built bundle. CDN usage requires the built file.
+  console.log('🦁 Savage Frameworks v' + VERSION + ' - Import from CDN or use ESM imports');
 }

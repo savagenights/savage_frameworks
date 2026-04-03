@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test - Savage Framework</title>
+    <link rel="stylesheet" href="../src/savage.css">
+</head>
+<body style="padding: 2rem;">
+    <h1>🦁 Savage Framework - Simple Test</h1>
+    
+    <div id="test-app">
+        <p>Count: <span id="count">0</span></p>
+        <button id="increment">+</button>
+    </div>
+
+    <div id="status" style="margin-top: 2rem; padding: 1rem; background: #f0f0f0; border-radius: 8px;">
+        Loading...
+    </div>
+
+    <script type="module">
+        try {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = 'Importing SavageApp...';
+            
+            import('../src/savage.js').then(module => {
+                const { SavageApp } = module;
+                statusEl.textContent = 'SavageApp imported successfully!';
+                statusEl.style.background = '#d1fae5';
+                
+                // Try to create an app
+                const app = new SavageApp({ debug: true });
+                statusEl.textContent += ' | App created!';
+                
+                // Simple manual test
+                let count = 0;
+                const countEl = document.getElementById('count');
+                const btn = document.getElementById('increment');
+                
+                btn.addEventListener('click', () => {
+                    count++;
+                    countEl.textContent = count;
+                });
+                
+                statusEl.innerHTML += '<br><strong>✅ Framework loaded successfully!</strong>';
+            }).catch(err => {
+                statusEl.textContent = 'Import error: ' + err.message;
+                statusEl.style.background = '#fee2e2';
+                console.error('Import error:', err);
+            });
+        } catch (err) {
+            document.getElementById('status').textContent = 'Error: ' + err.message;
+            console.error('Error:', err);
+        }
+    </script>
+</body>
+</html>

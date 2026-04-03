@@ -63,38 +63,49 @@
     <script type="module">
         import { SavageApp } from '../src/savage.js';
         
-        // Create the counter component
-        const app = new SavageApp({ debug: true });
+        console.log('🦁 Counter demo starting...');
         
-        app.component('counter', {
-            state: {
-                count: 0,
-                step: 1
-            },
-            actions: {
-                increment(state) {
-                    return { count: state.count + state.step };
+        try {
+            // Create the counter component
+            const app = new SavageApp({ debug: true });
+            
+            app.component('counter', {
+                state: {
+                    count: 0,
+                    step: 1
                 },
-                decrement(state) {
-                    return { count: state.count - state.step };
+                actions: {
+                    increment(state) {
+                        console.log('Increment action called', state);
+                        return { count: state.count + state.step };
+                    },
+                    decrement(state) {
+                        console.log('Decrement action called', state);
+                        return { count: state.count - state.step };
+                    },
+                    reset(state) {
+                        return { count: 0 };
+                    }
                 },
-                reset(state) {
-                    return { count: 0 };
+                onCreated() {
+                    console.log('Counter component created!');
+                },
+                onMounted(el) {
+                    console.log('Counter mounted to:', el);
                 }
-            },
-            onCreated() {
-                console.log('Counter component created!');
-            },
-            onMounted(el) {
-                console.log('Counter mounted to:', el);
-            }
-        });
-        
-        // Mount all declarative components
-        app.mountAll();
-        
-        // Expose to window for debugging
-        window.savageApp = app;
+            });
+            
+            // Mount all declarative components
+            console.log('Mounting all components...');
+            app.mountAll();
+            console.log('Components mounted!');
+            
+            // Expose to window for debugging
+            window.savageApp = app;
+        } catch (err) {
+            console.error('Error loading counter:', err);
+            document.body.innerHTML += '<div style="color: red; padding: 20px;">Error: ' + err.message + '</div>';
+        }
     </script>
 </body>
 </html>
